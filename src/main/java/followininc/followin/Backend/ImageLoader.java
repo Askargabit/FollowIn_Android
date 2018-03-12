@@ -1,26 +1,24 @@
-package followininc.followin;
+package followininc.followin.Backend;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import followininc.followin.R;
 
 public class ImageLoader {
 
@@ -38,17 +36,19 @@ public class ImageLoader {
 	final int stub_id = R.drawable.profile;
 
 	public void DisplayImage(String url, ImageView imageView) {
-		Log.e("Image", url);
+		//Log.e("ImageLoader-displayimage", url);
 		imageViews.put(imageView, url);
-		Bitmap bitmap = memoryCache.get(url);
+		//Bitmap bitmap = memoryCache.get(url);
+		Bitmap bitmap = getBitmap(url);
 		if (bitmap != null)
+		{
 			imageView.setImageBitmap(bitmap);
+		}
 		else {
 			queuePhoto(url, imageView);
 			imageView.setImageResource(stub_id);
 		}
 	}
-
 
 	private void queuePhoto(String url, ImageView imageView) {
 		PhotoToLoad p = new PhotoToLoad(url, imageView);
@@ -57,18 +57,16 @@ public class ImageLoader {
 
 	private Bitmap getBitmap(String url) {
 		File f = fileCache.getFile(url);
-
-		// from SD cache
 		Bitmap b = decodeFile(f);
 		if (b != null)
 			return b;
-
-		// from web
+		b = memoryCache.get(url);
+		if (b != null)
+			return b;
 		try {
 			Bitmap bitmap = null;
 			URL imageUrl = new URL(url);
-			HttpURLConnection conn = (HttpURLConnection) imageUrl
-					.openConnection();
+			/*HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
 			conn.setConnectTimeout(30000);
 			conn.setReadTimeout(30000);
 			conn.setInstanceFollowRedirects(true);
@@ -76,8 +74,10 @@ public class ImageLoader {
 			OutputStream os = new FileOutputStream(f);
 			Utils.CopyStream(is, os);
 			os.close();
-			conn.disconnect();
-			bitmap = decodeFile(f);
+			conn.disconnect();*/
+			bitmap = BitmapFactory.decodeStream((InputStream)imageUrl.getContent());
+			memoryCache.put(url, bitmap);
+			//bitmap = decodeFile(f);
 			return bitmap;
 		} catch (Throwable ex) {
 			ex.printStackTrace();

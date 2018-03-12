@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/SecondMenuButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:paddingTop="5dp">
+
+        <Button
+            android:id="@+id/btnFollows"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:layout_marginRight="40dip"
+            android:text="Followings" />
+
+        <Button
+            android:id="@+id/btnFollowing"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:layout_marginRight="40dip"
+            android:text="Followed by" />
+
+        <Button
+            android:id="@+id/btnNotfollowing"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:layout_marginRight="40dip"
+            android:text="Not following me back" />
+
+        <Button
+            android:id="@+id/btnNotfollowing2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:layout_marginRight="40dip"
+            android:text="Not following them back" />
+
+        <Button
+            android:id="@+id/btnNewFollower"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:layout_marginRight="40dip"
+            android:text="New Followers" />
+
+
+        <Button
+            android:id="@+id/btnUnfollowed"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:layout_marginRight="40dip"
+            android:text="Unfollowed me" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <ImageView
+                android:id="@+id/addimage1"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/profile"/>
+
+
+            <ImageView
+                android:id="@+id/addimage2"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/addimage1"
+                android:layout_marginStart="11dp"
+                android:src="@drawable/profile"/>
+
+
+            <Button
+                android:id="@+id/calculate"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:text="calculate"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

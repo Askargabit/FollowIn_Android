@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-import followininc.followin.JSONParser;
+import followininc.followin.Backend.JSONParser;
 import followininc.followin.R;
 import followininc.followin.RelationShipAdapter;
 

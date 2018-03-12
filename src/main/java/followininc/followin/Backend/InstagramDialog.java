@@ -1,4 +1,4 @@
-package followininc.followin;
+package followininc.followin.Backend;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -25,8 +25,8 @@ import android.widget.TextView;
  */
 
 public class InstagramDialog extends Dialog {
-    static final float[] DIMENSIONS_LANDSCAPE = { 460, 260 };
-    static final float[] DIMENSIONS_PORTRAIT = { 280, 420 };
+    static final float[] DIMENSIONS_LANDSCAPE = { 240, 260 };
+    static final float[] DIMENSIONS_PORTRAIT = { 320, 240 };
     static final FrameLayout.LayoutParams FILL = new FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.FILL_PARENT,
             ViewGroup.LayoutParams.FILL_PARENT);
@@ -57,9 +57,9 @@ public class InstagramDialog extends Dialog {
         setUpWebView();
         Display display = getWindow().getWindowManager().getDefaultDisplay();
         final float scale = getContext().getResources().getDisplayMetrics().density;
-        //float[] dimensions = (display.getWidth() < display.getHeight()) ? DIMENSIONS_PORTRAIT : DIMENSIONS_LANDSCAPE;
-        //addContentView(mContent, new FrameLayout.LayoutParams( (int) (dimensions[0] * scale + 0.5f), (int) (dimensions[1] * scale + 0.5f)));
-        addContentView(mContent, new FrameLayout.LayoutParams( (display.getWidth()), (display.getHeight())));
+        float[] dimensions = (display.getWidth() < display.getHeight()) ? DIMENSIONS_PORTRAIT : DIMENSIONS_LANDSCAPE;
+        addContentView(mContent, new FrameLayout.LayoutParams( (int) (dimensions[0] * scale + 0.5f), (int) (dimensions[1] * scale + 0.5f)));
+        //addContentView(mContent, new FrameLayout.LayoutParams( (display.getWidth()), (display.getHeight())));
         CookieSyncManager.createInstance(getContext());
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.removeAllCookie(); }
@@ -67,7 +67,7 @@ public class InstagramDialog extends Dialog {
         private void setUpTitle()
         { requestWindowFeature(Window.FEATURE_NO_TITLE);
             mTitle = new TextView(getContext());
-            mTitle.setText("Instagram");
+            //mTitle.setText("Instagram");
             mTitle.setTextColor(Color.WHITE);
             mTitle.setTypeface(Typeface.DEFAULT_BOLD);
             mTitle.setBackgroundColor(Color.BLACK);
@@ -81,7 +81,7 @@ public class InstagramDialog extends Dialog {
             mWebView.setWebViewClient(new OAuthWebViewClient());
             mWebView.getSettings().setJavaScriptEnabled(true);
             mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
-            mWebView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+            mWebView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
             mWebView.loadUrl(mUrl);
             mWebView.setLayoutParams(FILL);
             mContent.addView(mWebView); }

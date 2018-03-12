@@ -9,19 +9,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,9 +42,9 @@ import followininc.followin.R;
 
 import static followininc.followin.Backend.InstagramApp.WHAT_FINALIZE;
 
-public class mainmenu extends FragmentActivity implements OnClickListener {
+public class test extends FragmentActivity implements View.OnClickListener {
 
-    private InstagramApp mApp; private BottomNavigationView mBottomNav; private Button btnDisconnect;
+    private InstagramApp mApp; private Button btnDisconnect; private RelativeLayout bottom_nav;
     private Button btnGetAllImages; private Button btnFollowers;
     private Button btnUnfollowed; private Button btnNewFollower;
     private Button btnFollwing; private Button btnNotfollowing;
@@ -56,6 +53,7 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
     private ImageView profile_picture; private TextView profile_username; private TextView profile_fullname;
     private TextView profile_info; private ImageView addimage1; private ImageView addimage2;
     LinearLayout FirstMenuButton, SecondMenuButton, ThirdMenuButton;
+    private ImageView btnHome; private ImageView btnDashboard; private ImageView btnProfile;
     private HashMap<String, String> userInfoHashmap = new HashMap<String, String>();
     private Button btncalculate;
     private Handler handler = new Handler(new Handler.Callback() {
@@ -65,7 +63,7 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
             if (msg.what == WHAT_FINALIZE) {
                 userInfoHashmap = mApp.getUserInfo();
             } else if (msg.what == WHAT_FINALIZE) {
-                Toast.makeText(mainmenu.this, "Check your network.1", Toast.LENGTH_SHORT).show();
+                Toast.makeText(test.this, "Check your network.1", Toast.LENGTH_SHORT).show();
             }
             return false;
         }
@@ -92,40 +90,18 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
     int second = -1;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mainmenu);
+        setContentView(R.layout.activity_test);
         Qwerty();
         db = new MySQLiteHelper(getApplicationContext());
         bindEventHandlers();
         mApp = new InstagramApp(this, ApplicationData.CLIENT_ID, ApplicationData.CLIENT_SECRET, ApplicationData.CALLBACK_URL);
         mApp.fetchUserName(handler);
-        downloaddata a = new downloaddata();
+        test.downloaddata2 a = new downloaddata2();
         a.execute();
-        mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_notifications:
-                        FirstMenuButton.setVisibility(LinearLayout.VISIBLE);
-                        SecondMenuButton.setVisibility(LinearLayout.GONE);
-                        ThirdMenuButton.setVisibility(LinearLayout.GONE);
-                        break;
-                    case R.id.navigation_dashboard:
-                        FirstMenuButton.setVisibility(LinearLayout.GONE);
-                        SecondMenuButton.setVisibility(LinearLayout.VISIBLE);
-                        ThirdMenuButton.setVisibility(LinearLayout.GONE);
-                        break;
-                    case R.id.navigation_home:
-                        FirstMenuButton.setVisibility(LinearLayout.GONE);
-                        SecondMenuButton.setVisibility(LinearLayout.GONE);
-                        ThirdMenuButton.setVisibility(LinearLayout.VISIBLE);
-                        break;
-                }
-                return true;
-            }
-        });
         connected();
         db.closeDB();
         dlg1 = new Photo_dialog_fragment();
@@ -138,12 +114,12 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 1) {
                     bubbleSort(likesList, commentsList, StandardSize_pictures, imageThumbList);
-                    profile_images_fragment.setAdapter(new MyGridListAdapter(mainmenu.this,imageThumbList,likesList, commentsList));
+                    profile_images_fragment.setAdapter(new MyGridListAdapter(test.this,imageThumbList,likesList, commentsList));
                 } else if (position == 2) {
                     bubbleSort(commentsList, likesList, StandardSize_pictures, imageThumbList);
-                    profile_images_fragment.setAdapter(new MyGridListAdapter(mainmenu.this,imageThumbList,likesList, commentsList));
+                    profile_images_fragment.setAdapter(new MyGridListAdapter(test.this,imageThumbList,likesList, commentsList));
                 } else if (position == 0) {
-                    profile_images_fragment.setAdapter(new MyGridListAdapter(mainmenu.this, imageThumbList_sorted_by_time, likesList_sorted_by_time, commentsList_sorted_by_time));
+                    profile_images_fragment.setAdapter(new MyGridListAdapter(test.this, imageThumbList_sorted_by_time, likesList_sorted_by_time, commentsList_sorted_by_time));
                 }
             }
 
@@ -178,7 +154,7 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
 
     private void Qwerty()
     {
-        mBottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottom_nav = (RelativeLayout) findViewById(R.id.bottom_nav);
         FirstMenuButton = (LinearLayout) findViewById(R.id.FirstMenuButton);
         SecondMenuButton = (LinearLayout) findViewById(R.id.SecondMenuButton);
         ThirdMenuButton = (LinearLayout) findViewById(R.id.ThirdMenuButton);
@@ -200,6 +176,9 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
         addimage1 = (ImageView) findViewById(R.id.addimage1);
         addimage2 = (ImageView) findViewById(R.id.addimage2);
         btncalculate = (Button) findViewById(R.id.calculate);
+        btnHome = (ImageView) findViewById(R.id.btnhome);
+        btnProfile = (ImageView) findViewById(R.id.btnprofile);
+        btnDashboard = (ImageView) findViewById(R.id.btndashboard);
     }
 
     private void setProfile() {
@@ -213,7 +192,7 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
         profile_fullname.setText(userInfoHashmap.get(InstagramApp.TAG_FULL_NAME));
         profile_username.setText(userInfoHashmap.get(InstagramApp.TAG_USERNAME));
         profile_info.setText(userInfoHashmap.get(InstagramApp.TAG_BIO));
-        new ImageLoader(mainmenu.this).DisplayImage(userInfoHashmap.get(InstagramApp.TAG_PROFILE_PICTURE), profile_picture);
+        new ImageLoader(test.this).DisplayImage(userInfoHashmap.get(InstagramApp.TAG_PROFILE_PICTURE), profile_picture);
         imageThumbList_sorted_by_time = new ArrayList<>(imageThumbList);
         likesList_sorted_by_time = new ArrayList<>(likesList);
         commentsList_sorted_by_time = new ArrayList<>(commentsList);
@@ -231,7 +210,9 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
         btnNewFollower.setOnClickListener(this);
         addimage1.setOnClickListener(this);
         addimage2.setOnClickListener(this);
-        btncalculate.setOnClickListener(this);
+        btnHome.setOnClickListener(this);
+        btnDashboard.setOnClickListener(this);
+        btnProfile.setOnClickListener(this);
     }
 
     @Override
@@ -246,31 +227,31 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
             Bundle bundle = new Bundle();
             if (v == btnFollowers) {
                 bundle.putSerializable("value", Data_followings);
-                startActivity(new Intent(mainmenu.this, Relationship.class).putExtra("userId", userInfoHashmap.get(InstagramApp.TAG_ID)).putExtra("Token", mApp.getTOken()).putExtras(bundle));
+                startActivity(new Intent(test.this, Relationship.class).putExtra("userId", userInfoHashmap.get(InstagramApp.TAG_ID)).putExtra("Token", mApp.getTOken()).putExtras(bundle));
             } else {
                 bundle.putSerializable("value", Data_followers);
-                startActivity(new Intent(mainmenu.this, Relationship.class).putExtra("userId", userInfoHashmap.get(InstagramApp.TAG_ID)).putExtra("Token", mApp.getTOken()).putExtras(bundle));
+                startActivity(new Intent(test.this, Relationship.class).putExtra("userId", userInfoHashmap.get(InstagramApp.TAG_ID)).putExtra("Token", mApp.getTOken()).putExtras(bundle));
             }
         }
         else if(v == btnNotfollowing)
         {
             String url1 = "https://api.instagram.com/v1/users/" + userInfoHashmap.get(InstagramApp.TAG_ID) + "/follows?access_token=" + mApp.getTOken();
             String url2 = "https://api.instagram.com/v1/users/" + userInfoHashmap.get(InstagramApp.TAG_ID) + "/followed-by?access_token=" + mApp.getTOken();
-            startActivity(new Intent(mainmenu.this, relnotfollowing.class).putExtra("userInfo1", url1).putExtra("userInfo2", url2));
+            startActivity(new Intent(test.this, relnotfollowing.class).putExtra("userInfo1", url1).putExtra("userInfo2", url2));
         }
         else if(v == btnNotfollowing2)
         {
             String url2 = "https://api.instagram.com/v1/users/" + userInfoHashmap.get(InstagramApp.TAG_ID) + "/follows?access_token=" + mApp.getTOken();
             String url1 = "https://api.instagram.com/v1/users/" + userInfoHashmap.get(InstagramApp.TAG_ID) + "/followed-by?access_token=" + mApp.getTOken();
-            startActivity(new Intent(mainmenu.this, relnotfollowing.class).putExtra("userInfo1", url1).putExtra("userInfo2", url2));
+            startActivity(new Intent(test.this, relnotfollowing.class).putExtra("userInfo1", url1).putExtra("userInfo2", url2));
         }
         else if(v == btnNewFollower)
         {
-            startActivity(new Intent(mainmenu.this, RelationshipChanges.class).putExtra("Token", "2"));
+            startActivity(new Intent(test.this, RelationshipChanges.class).putExtra("Token", "2"));
         }
         else if(v == btnUnfollowed)
         {
-            startActivity(new Intent(mainmenu.this, RelationshipChanges.class).putExtra("Token", "1"));
+            startActivity(new Intent(test.this, RelationshipChanges.class).putExtra("Token", "1"));
         }
         else if(v == addimage1 || v == addimage2)
         {
@@ -278,7 +259,25 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
         }
         else if(v == btncalculate && first != -1 && second != -1)
         {
-            startActivity(new Intent(mainmenu.this, ComparePosts.class).putExtra("First", imageid.get(first)).putExtra("Second",imageid.get(second)).putExtra("Token",mApp.getTOken()));
+            startActivity(new Intent(test.this, ComparePosts.class).putExtra("First", imageid.get(first)).putExtra("Second",imageid.get(second)).putExtra("Token",mApp.getTOken()));
+        }
+        else if(v == btnHome)
+        {
+            FirstMenuButton.setVisibility(LinearLayout.GONE);
+            SecondMenuButton.setVisibility(LinearLayout.GONE);
+            ThirdMenuButton.setVisibility(LinearLayout.VISIBLE);
+        }
+        else if(v == btnDashboard)
+        {
+            FirstMenuButton.setVisibility(LinearLayout.GONE);
+            SecondMenuButton.setVisibility(LinearLayout.VISIBLE);
+            ThirdMenuButton.setVisibility(LinearLayout.GONE);
+        }
+        else if(v == btnProfile)
+        {
+            FirstMenuButton.setVisibility(LinearLayout.VISIBLE);
+            SecondMenuButton.setVisibility(LinearLayout.GONE);
+            ThirdMenuButton.setVisibility(LinearLayout.GONE);
         }
     }
 
@@ -286,7 +285,7 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
     {
         if(mApp.hasAccessToken())
         {
-            mBottomNav.setVisibility(View.VISIBLE);
+            bottom_nav.setVisibility(View.VISIBLE);
             FirstMenuButton.setVisibility(LinearLayout.VISIBLE);
             db.onUpdate();
         }
@@ -294,12 +293,12 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
 
     private void DisconnectUser() {
         if (mApp.hasAccessToken()) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(mainmenu.this);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(test.this);
             builder.setMessage("Disconnect from Instagram?").setCancelable(false).setPositiveButton("Yes",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             mApp.resetAccessToken();
-                            startActivity(new Intent(mainmenu.this, Login.class));
+                            startActivity(new Intent(test.this, Login.class));
                         }
                     })
                     .setNegativeButton("No",
@@ -342,7 +341,7 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
         // Prepare grid view
         final GridView gridView = new GridView(this);
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        gridView.setAdapter(new MyGridListAdapterForDialog(mainmenu.this,imageThumbList_sorted_by_time,likesList_sorted_by_time, commentsList_sorted_by_time));
+        gridView.setAdapter(new MyGridListAdapterForDialog(test.this,imageThumbList_sorted_by_time,likesList_sorted_by_time, commentsList_sorted_by_time));
         gridView.setNumColumns(3);
         gridView.setHorizontalSpacing(10);
         gridView.setVerticalSpacing(10);
@@ -382,11 +381,11 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
             public void onClick(DialogInterface dialog, int which) {
                 if(first != -1)
                 {
-                    new ImageLoader(mainmenu.this).DisplayImage(imageThumbList.get(first), addimage1);
+                    new ImageLoader(test.this).DisplayImage(imageThumbList.get(first), addimage1);
                 }
                 if(second != -1)
                 {
-                    new ImageLoader(mainmenu.this).DisplayImage(imageThumbList.get(second), addimage2);
+                    new ImageLoader(test.this).DisplayImage(imageThumbList.get(second), addimage2);
                 }
                 _dialog.dismiss();
             }
@@ -396,112 +395,112 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
         _dialog = builder.show();
     }
 
-    class downloaddata extends AsyncTask<Void, Void, Void>{
+    class downloaddata2 extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
-            pd = ProgressDialog.show(mainmenu.this, "", "Loading...");
+            pd = ProgressDialog.show(test.this, "", "Loading...");
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            profile_images_fragment.setAdapter(new MyGridListAdapter(mainmenu.this,imageThumbList,likesList, commentsList));
+            profile_images_fragment.setAdapter(new MyGridListAdapter(test.this,imageThumbList,likesList, commentsList));
             setProfile();
             pd.dismiss();
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-                    int what = 0;
-                    String url = "https://api.instagram.com/v1/users/self/follows?access_token=" + mApp.getTOken();
+            int what = 0;
+            String url = "https://api.instagram.com/v1/users/self/follows?access_token=" + mApp.getTOken();
+            try {
+                JSONParser jsonParser = new JSONParser();
+                JSONObject jsonObject = jsonParser.getJSONFromUrlByGet(url);
+                ArrayList<String> optionlist2;
+                JSONArray data = jsonObject.getJSONArray("data");
+                for (int data_i = 0; data_i < data.length(); data_i++) {
+                    optionlist2 = new ArrayList<String>();
+                    JSONObject data_obj = data.getJSONObject(data_i);
+                    String str_id = data_obj.getString("id");
+                    String str_fullname = data_obj.getString("full_name");
+                    //String str_bio = data_obj.getString("bio");
+                    String str_username = data_obj.getString("username");
+                    String info = "https://api.instagram.com/v1/users/" + str_id + "/?access_token=" + mApp.getTOken();
+                    String profile_picture = data_obj.getString("profile_picture");
+                    JSONParser jsonParser2 = new JSONParser();
+                    JSONObject jsonObject2;
+                    JSONObject Counts;
                     try {
-                        JSONParser jsonParser = new JSONParser();
-                        JSONObject jsonObject = jsonParser.getJSONFromUrlByGet(url);
-                        ArrayList<String> optionlist2;
-                        JSONArray data = jsonObject.getJSONArray("data");
-                        for (int data_i = 0; data_i < data.length(); data_i++) {
-                            optionlist2 = new ArrayList<String>();
-                            JSONObject data_obj = data.getJSONObject(data_i);
-                            String str_id = data_obj.getString("id");
-                            String str_fullname = data_obj.getString("full_name");
-                            //String str_bio = data_obj.getString("bio");
-                            String str_username = data_obj.getString("username");
-                            String info = "https://api.instagram.com/v1/users/" + str_id + "/?access_token=" + mApp.getTOken();
-                            String profile_picture = data_obj.getString("profile_picture");
-                            JSONParser jsonParser2 = new JSONParser();
-                            JSONObject jsonObject2;
-                            JSONObject Counts;
-                            try {
-                                jsonObject2 = jsonParser2.getJSONFromUrlByGet(info);
-                                Counts = jsonObject2.getJSONObject("data").getJSONObject("counts");
-                                String followers = Counts.getString("followed_by");
-                                String followings = Counts.getString("follows");
-                                String posts = Counts.getString("media");
-                                //Data
-                                // 0. Id  1.username 2.profile_picture 3.followers 4.followings 5.posts 6.likes to me 7.Likes/Post 8.fullname 9.Recent activity
-                                optionlist2.add(str_id); optionlist2.add(str_username); optionlist2.add(profile_picture);
-                                optionlist2.add(followers); optionlist2.add(followings); optionlist2.add(posts); optionlist2.add("0");
-                                optionlist2.add("0"); optionlist2.add(str_fullname); optionlist2.add("0");//optionlist2.add(str_bio); //likes from me
-                                Data_followings.add(optionlist2);
-                            }
-                            catch (Exception exception)
-                            {
-                                optionlist2.add(str_id); optionlist2.add(str_username); optionlist2.add(profile_picture);
-                                optionlist2.add("unknown"); optionlist2.add("unknown"); optionlist2.add("unknown"); optionlist2.add("0");
-                                optionlist2.add("0"); optionlist2.add(str_fullname); optionlist2.add("0");//optionlist2.add(str_bio);//likes from me
-                                exception.printStackTrace();
-                                Data_followings.add(optionlist2);
-                            }
-                        }
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
-                        what = 1;
+                        jsonObject2 = jsonParser2.getJSONFromUrlByGet(info);
+                        Counts = jsonObject2.getJSONObject("data").getJSONObject("counts");
+                        String followers = Counts.getString("followed_by");
+                        String followings = Counts.getString("follows");
+                        String posts = Counts.getString("media");
+                        //Data
+                        // 0. Id  1.username 2.profile_picture 3.followers 4.followings 5.posts 6.likes to me 7.Likes/Post 8.fullname 9.Recent activity
+                        optionlist2.add(str_id); optionlist2.add(str_username); optionlist2.add(profile_picture);
+                        optionlist2.add(followers); optionlist2.add(followings); optionlist2.add(posts); optionlist2.add("0");
+                        optionlist2.add("0"); optionlist2.add(str_fullname); optionlist2.add("0");//optionlist2.add(str_bio); //likes from me
+                        Data_followings.add(optionlist2);
                     }
-                    url = "https://api.instagram.com/v1/users/self/followed-by?access_token=" + mApp.getTOken();
+                    catch (Exception exception)
+                    {
+                        optionlist2.add(str_id); optionlist2.add(str_username); optionlist2.add(profile_picture);
+                        optionlist2.add("unknown"); optionlist2.add("unknown"); optionlist2.add("unknown"); optionlist2.add("0");
+                        optionlist2.add("0"); optionlist2.add(str_fullname); optionlist2.add("0");//optionlist2.add(str_bio);//likes from me
+                        exception.printStackTrace();
+                        Data_followings.add(optionlist2);
+                    }
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                what = 1;
+            }
+            url = "https://api.instagram.com/v1/users/self/followed-by?access_token=" + mApp.getTOken();
+            try {
+                JSONParser jsonParser = new JSONParser();
+                JSONObject jsonObject = jsonParser.getJSONFromUrlByGet(url);
+                JSONArray data = jsonObject.getJSONArray("data");
+                ArrayList<String> optionlist;
+                for (int data_i = 0; data_i < data.length(); data_i++) {
+                    optionlist = new ArrayList<String>();
+                    JSONObject data_obj = data.getJSONObject(data_i);
+                    String str_id = data_obj.getString("id");
+                    String str_fullname = data_obj.getString("full_name");
+                    //String str_bio = data_obj.getString("bio");
+                    String str_username = data_obj.getString("username");
+                    String profile_picture = data_obj.getString("profile_picture");
+                    String info = "https://api.instagram.com/v1/users/" + str_id + "/?access_token=" + mApp.getTOken();
+                    JSONParser jsonParser2 = new JSONParser();
+                    JSONObject jsonObject2;
+                    JSONObject Counts;
                     try {
-                        JSONParser jsonParser = new JSONParser();
-                        JSONObject jsonObject = jsonParser.getJSONFromUrlByGet(url);
-                        JSONArray data = jsonObject.getJSONArray("data");
-                        ArrayList<String> optionlist;
-                        for (int data_i = 0; data_i < data.length(); data_i++) {
-                            optionlist = new ArrayList<String>();
-                            JSONObject data_obj = data.getJSONObject(data_i);
-                            String str_id = data_obj.getString("id");
-                            String str_fullname = data_obj.getString("full_name");
-                            //String str_bio = data_obj.getString("bio");
-                            String str_username = data_obj.getString("username");
-                            String profile_picture = data_obj.getString("profile_picture");
-                            String info = "https://api.instagram.com/v1/users/" + str_id + "/?access_token=" + mApp.getTOken();
-                            JSONParser jsonParser2 = new JSONParser();
-                            JSONObject jsonObject2;
-                            JSONObject Counts;
-                            try {
-                                jsonObject2 = jsonParser2.getJSONFromUrlByGet(info);
-                                Counts = jsonObject2.getJSONObject("data").getJSONObject("counts");
-                                String followers = Counts.getString("followed_by");
-                                String followings = Counts.getString("follows");
-                                String posts = Counts.getString("media");
-                                User user = new User( str_id,str_username,profile_picture,Integer.getInteger(followers),Integer.getInteger(followings),Integer.getInteger(posts));
-                                long id = db.CreateRow(user, new long[]{data_i});
-                                optionlist.add(str_id); optionlist.add(str_username); optionlist.add(profile_picture);
-                                optionlist.add(followers); optionlist.add(followings); optionlist.add(posts); optionlist.add("0");
-                                optionlist.add("0"); optionlist.add(str_fullname); optionlist.add("0");//optionlist.add(str_bio);//likes from me
-                                Data_followers.add(optionlist);
-                            }
-                            catch (Exception exception)
-                            {
-                                optionlist.add(str_id); optionlist.add(str_username); optionlist.add(profile_picture);
-                                optionlist.add("unknown"); optionlist.add("unknown"); optionlist.add("unknown"); optionlist.add("0"); // for likes to me
-                                optionlist.add("0"); optionlist.add(str_fullname); optionlist.add("0");//optionlist.add(str_bio);//likes from me
-                                User user = new User( str_id,str_username,profile_picture,-1,-1,-1);
-                                long id = db.CreateRow(user, new long[]{data_i});
-                                Data_followers.add(optionlist);
-                                exception.printStackTrace();
-                            }
-                        }
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
-                        what = 1;
+                        jsonObject2 = jsonParser2.getJSONFromUrlByGet(info);
+                        Counts = jsonObject2.getJSONObject("data").getJSONObject("counts");
+                        String followers = Counts.getString("followed_by");
+                        String followings = Counts.getString("follows");
+                        String posts = Counts.getString("media");
+                        User user = new User( str_id,str_username,profile_picture,Integer.getInteger(followers),Integer.getInteger(followings),Integer.getInteger(posts));
+                        long id = db.CreateRow(user, new long[]{data_i});
+                        optionlist.add(str_id); optionlist.add(str_username); optionlist.add(profile_picture);
+                        optionlist.add(followers); optionlist.add(followings); optionlist.add(posts); optionlist.add("0");
+                        optionlist.add("0"); optionlist.add(str_fullname); optionlist.add("0");//optionlist.add(str_bio);//likes from me
+                        Data_followers.add(optionlist);
                     }
+                    catch (Exception exception)
+                    {
+                        optionlist.add(str_id); optionlist.add(str_username); optionlist.add(profile_picture);
+                        optionlist.add("unknown"); optionlist.add("unknown"); optionlist.add("unknown"); optionlist.add("0"); // for likes to me
+                        optionlist.add("0"); optionlist.add(str_fullname); optionlist.add("0");//optionlist.add(str_bio);//likes from me
+                        User user = new User( str_id,str_username,profile_picture,-1,-1,-1);
+                        long id = db.CreateRow(user, new long[]{data_i});
+                        Data_followers.add(optionlist);
+                        exception.printStackTrace();
+                    }
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                what = 1;
+            }
             what = WHAT_FINALIZE;
             try {
                 JSONParser jsonParser = new JSONParser();
@@ -532,7 +531,8 @@ public class mainmenu extends FragmentActivity implements OnClickListener {
                 what = 1;
             }
             return null;
-            }
         }
-
     }
+
+
+}

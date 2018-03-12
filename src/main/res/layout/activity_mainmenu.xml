@@ -4,92 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <fragment
+        android:name="followininc.followin.Menu.Menu_1_Fragment"
+        android:id="@+id/Menu_1_Fragment"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dip"
-        android:layout_marginRight="40dip"
-        android:visibility="visible"
-        android:text="Connect"
-        android:id="@+id/btnConnect"/>
+    <fragment
+        android:name="followininc.followin.Menu.Menu_2_Fragment"
+        android:id="@+id/Menu_2_Fragment"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
 
-    <LinearLayout
-        android:id="@+id/FirstMenuButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone" >
-
-        <Button
-            android:id="@+id/btnViewInfo"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dip"
-            android:layout_marginRight="40dip"
-            android:text="View Info" />
-
-        <Button
-            android:id="@+id/btnFollows"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dip"
-            android:layout_marginRight="40dip"
-            android:text="Followers" />
-
-        <Button
-            android:id="@+id/btnFollowing"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dip"
-            android:layout_marginRight="40dip"
-            android:text="Followings" />
-
-        <Button
-            android:id="@+id/btnNotfollowing"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dip"
-            android:layout_marginRight="40dip"
-            android:text="Not following" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/SecondMenuButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone" >
-
-        <Button
-            android:id="@+id/btnGetAllImages"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dip"
-            android:layout_marginRight="40dip"
-            android:text="All Images" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ThirdMenuButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone" >
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dip"
-            android:layout_marginRight="40dip"
-            android:text="Disconnect"
-            android:id="@+id/btnDisconnect"/>
-
-    </LinearLayout>
+    <fragment
+        android:name="followininc.followin.Menu.Menu_3_Fragment"
+        android:id="@+id/Menu_3_Fragment"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"

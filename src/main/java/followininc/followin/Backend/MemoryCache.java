@@ -1,4 +1,4 @@
-package followininc.followin;
+package followininc.followin.Backend;
 
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -28,9 +28,12 @@ public class MemoryCache {
     }
 
     public Bitmap get(String id){
+        //Log.e("MemoryCache-get",id);
         try{
             if(!cache.containsKey(id))
+            {
                 return null;
+            }
             //NullPointerException sometimes happen here http://code.google.com/p/osmdroid/issues/detail?id=78 
             return cache.get(id);
         }catch(NullPointerException ex){

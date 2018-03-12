@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="followininc.followin.Menu.test"
+    android:baselineAligned="false">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:elevation="8dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rectangle_1"
+            android:elevation="8dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:text="FollowIn"
+            android:textSize="18sp"
+            android:elevation="10dp"/>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_refresh"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="5dp"
+            android:elevation="10dp"/>
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <fragment
+            android:name="followininc.followin.Menu.Menu_1_Fragment"
+            android:id="@+id/Menu_1_Fragment"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
+
+        <fragment
+            android:name="followininc.followin.Menu.Menu_2_Fragment"
+            android:id="@+id/Menu_2_Fragment"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
+
+        <fragment
+            android:name="followininc.followin.Menu.Menu_3_Fragment"
+            android:id="@+id/Menu_3_Fragment"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"/>
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:id="@+id/bottom_nav">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rectangle_2"
+            android:elevation="10dp"
+            />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:elevation="10dp">
+
+        <ImageView
+            android:id="@+id/btnprofile"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_weight="0.5"
+            android:src="@drawable/ic_profile"/>
+
+        <ImageView
+            android:id="@+id/btndashboard"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="0.5"
+            android:src="@drawable/ic_dashboard_black_24dp"/>
+
+        <ImageView
+            android:id="@+id/btnhome"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="0.5"
+            android:src="@drawable/ic_home_black_24dp"/>
+
+
+    </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
